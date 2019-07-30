@@ -1,7 +1,7 @@
 /*
  * list.h
  *
- * This library is an implementation of dynamic list
+ * This library is an implementation of a dynamic list
  *
  *  	Created on: 30/7/2019
  *      Author: Amr Halim
