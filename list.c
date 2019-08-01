@@ -5,84 +5,111 @@
  */
 #include "list.h"
 #include <stdlib.h>
-#define MAX_SIZE 512
-#define initializeList(ptr, s) ptr=(int *)malloc(sizeof(int)*s)
+#include <stdio.h>
+#define FAILED  -1
+#define SUCCESS 0
 
-typedef struct{
- int *list;
- int size;
- int end;
-}ListType;
-
-static ListType ls={0, MAX_SIZE, -1};
-
-static void extendListSize(void){
+static void listResize(listType *ls, int size){
     int i, *newList;
     //allocate a new space for list > 2*previous size
-    initializeList(newList, 2*ls.size);
+    newList = (int *)malloc(sizeof(int)*size);
     //copy elements to the new list
-    for(i=0; i<ls.size; i++){
-        newList[i]=ls.list[i];
+    for(i=0; i<ls->size; i++){
+        newList[i]=ls->list[i];
     }
     //remove the space allocated for the old list
-    free(ls.list);
-    ls.list=newList;
+    free(ls->list);
+    ls->list=newList;
 }
 
-void LIST_insert(int val){
-    //first creation of the list
-    if(!(ls.list)){
-        initializeList(ls.list, MAX_SIZE);
+void LIST_init(listType *ls, int size){
+    if(ls){
+        ls->size = size;
+        ls->end = -1;
+        ls->list = (int *) malloc(sizeof(int)*size);
     }
-    ls.end++;
-    //if no empty space in list
-    if(ls.end==ls.size){
-        extendListSize();
-    }
-    ls.list[ls.end]=val;
 }
 
-void LIST_insertAtIndex(int val, int index){
-    int i;
-    //first creation of the list
-    if(!(ls.list)){
-        initializeList(ls.list, MAX_SIZE);
-    }
-    index--;
-    ls.end++;
-    //if no empty space in list
-    if(ls.end==ls.size){
-        extendListSize();
-    }
-    for(i=ls.end; i!=index; i--){
-        ls.list[i]=ls.list[i-1];
-    }
-    ls.list[index]=val;
-}
-
-void LIST_remove(int index){
-    int i;
-    if((index-1)<=ls.end){
-        for(i=index-1; i!=ls.end; i++){
-            ls.list[i]=ls.list[i+1];
+int LIST_insert(listType *ls, int val){
+    if(ls&&ls->list){
+        ls->end++;
+        //if no empty space in list
+        if(ls->end==ls->size){
+            listResize(ls, ls->size*2);
         }
-        ls.end--;
+        ls->list[ls->end]=val;
+        return SUCCESS;
+    }
+    return FAILED;
+}
+
+int LIST_insertAtIndex(listType *ls, int val, int index){
+    int i;
+    if(ls&&ls->list){
+        index--;
+        if((index>=0)&&(index<=ls->end)){
+            ls->end++;
+            //if no empty space in list
+            if(ls->end==ls->size){
+                listResize(ls, ls->size*2);
+            }
+            for(i=ls->end; i!=index; i--){
+                ls->list[i]=ls->list[i-1];
+            }
+            ls->list[index]=val;
+            return SUCCESS;
+        }
+    }
+    return FAILED;
+}
+
+int LIST_remove(listType *ls, int index){
+    int i;
+    if(ls&&ls->list){
+        index--;
+        if((index>=0)&&(index<=ls->end)){
+            for(i=index; i!=ls->end; i++){
+                ls->list[i]=ls->list[i+1];
+            }
+            ls->list[i]=0;
+            ls->end--;
+            return SUCCESS;
+        }
+    }
+    return FAILED;
+}
+
+int LIST_get(listType *ls, int index){
+    if(ls&&ls->list){
+        index--;
+        if((index>=0)&&(index<=ls->end)){
+        return ls->list[index];
+        }
+    }
+    return FAILED;
+}
+
+int LIST_edit(listType *ls, int val, int index){
+    if(ls&&ls->list){
+        index--;
+        if((index>=0)&&(index<=ls->end)){
+            ls->list[index]=val;
+            return SUCCESS;
+        }
+    }
+    return FAILED;
+}
+void LIST_print(listType *ls){
+    if(ls&&ls->list){
+        for(int i=0; i<(ls->end+1); i++){
+            printf("%d ", ls->list[i]);
+        }
     }
 }
 
-int LIST_get(int index){
-    if((index-1)<=ls.end){
-        return ls.list[index-1];
+int LIST_count(listType *ls){
+    if(ls&&ls->list){
+        return (ls->end+1);
     }
-    return -1;
-}
-
-void LIST_edit(int val, int index){
-    if((index-1)<=ls.end){
-        ls.list[index-1]=val;
-    }
-}
-
-int LIST_count(void){
-    return (ls.end+1);
+    return FAILED;
 }
