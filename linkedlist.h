@@ -14,17 +14,22 @@ struct node{
  //pointer the next node
  struct node* next;
 };
+struct linkedList{
+ //pointer start node of the list
+ struct node* head;
+};
 typedef struct node nodeType;
+typedef struct linkedList linkedListType;
 
-int LINKEDLIST_addNode(nodeType **head, int d);
-int LINKEDLIST_addNodeAtBeginning(nodeType **head, int d);
-int LINKEDLIST_addNodeAtIndex(nodeType **head, int d, int index);
-int LINKEDLIST_removeNode(nodeType **head, int index);
-void LINKEDLIST_print(nodeType **head);
-int LINKEDLIST_reverse(nodeType **head);
-int LINKEDLIST_getNoadeValue(nodeType **head, int index);
-int LINKEDLIST_editNoadeValue(nodeType **head, int d, int index);
-int LINKEDLIST_count(nodeType **head);
+void LINKEDLIST_createEmptyList(linkedListType *ls);
+int LINKEDLIST_addNode(linkedListType *ls, int d);
+int LINKEDLIST_addNodeAtBeginning(linkedListType *ls, int d);
+int LINKEDLIST_addNodeAtIndex(linkedListType *ls, int d, int index);
+int LINKEDLIST_removeNode(linkedListType *ls, int index);
+int LINKEDLIST_deleteList(linkedListType *ls);
+void LINKEDLIST_print(linkedListType *ls);
+int LINKEDLIST_reverse(linkedListType *ls);
+int LINKEDLIST_getNoadeValue(linkedListType *ls, int index);
+int LINKEDLIST_editNoadeValue(linkedListType *ls, int d, int index);
+int LINKEDLIST_count(linkedListType *ls);
 #endif // LINKED_LIST_H
-
-
