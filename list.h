@@ -21,9 +21,9 @@ void LIST_init(listType *ls, int size);
 int LIST_insert(listType *ls, int val);
 int LIST_insertAtIndex(listType *ls, int val, int index);
 int LIST_remove(listType *ls, int index);
+int LIST_deleteList(listType *ls);
 int LIST_get(listType *ls, int index);
 int LIST_edit(listType *ls, int val, int index);
 void LIST_print(listType *ls);
 int LIST_count(listType *ls);
 #endif // LIST_H
-
