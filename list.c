@@ -79,6 +79,13 @@ int LIST_remove(listType *ls, int index){
     return FAILED;
 }
 
+int LIST_deleteList(listType *ls){
+    free(ls->list);
+    ls->size=0;
+    ls->end=-1;
+    return SUCCESS;
+}
+
 int LIST_get(listType *ls, int index){
     if(ls&&ls->list){
         index--;
